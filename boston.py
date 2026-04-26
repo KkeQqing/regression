@@ -1,0 +1,79 @@
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.datasets import fetch_california_housing
+
+# --- 1. 加载数据 ---
+# 注意：新版本的 sklearn (v1.2+) 已经移除了 load_boston。
+# 这里使用加州房价数据集作为替代，因为它们的结构和任务类型（回归）完全一致。
+# 如果你使用的是旧版本 sklearn (<1.2)，可以使用注释中的 load_boston 部分。
+housing = fetch_california_housing()
+X = housing.data
+y = housing.target
+feature_names = housing.feature_names
+
+# --- 2. 数据预处理 ---
+# 划分训练集和测试集 (70% 训练, 30% 测试)
+# random_state=1 保证每次运行结果一致
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
+print("X_test:\n ", X_test)
+print("X_train:\n ", X_train)
+
+# 数据标准化
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# --- 3. 构建与训练模型 ---
+lr = LinearRegression()
+
+# 训练模型
+lr.fit(X_train, y_train)
+
+# --- 4. 预测与评估 ---
+# 在测试集上进行预测
+y_predict = lr.predict(X_test)
+
+# 打印模型的权重(系数)和偏置(截距)
+print("\n--- 模型参数 ---")
+print(f"权重 (Coefficients): {lr.coef_}")
+print(f"偏置 (Intercept): {lr.intercept_}")
+
+# 评估模型效果
+mse = mean_squared_error(y_test, y_predict)
+r2 = r2_score(y_test, y_predict)
+print(f"\n--- 评估指标 ---")
+print(f"均方误差 (MSE): {mse:.2f}")
+print(f"R² 得分 (R2 Score): {r2:.2f}")
+
+# --- 5. 可视化结果 ---
+# 4. 可视化 绘制真实房价走势 与预测的房价走势
+
+# 创建画布
+plt.figure()
+
+# 绘图-准备数据
+x = [i for i in range(len(y_predict))]
+
+# 绘制真实值曲线
+plt.plot(x, y_test)
+
+# 绘制预测值曲线
+plt.plot(x, y_predict)
+
+# 添加图例
+plt.legend(['真实值', '预测值'])
+
+# 修改rc参数, 增加支持中文
+plt.rcParams['font.sans-serif'] = 'SimHei'
+
+# 修改rc参数, 增加支持负号
+plt.rcParams['axes.unicode_minus'] = False
+
+# 添加标题
+plt.title('波士顿房价走势真实与预测值')
+
+# 展示
+plt.show()
