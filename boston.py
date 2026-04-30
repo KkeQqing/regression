@@ -10,7 +10,7 @@ from sklearn.datasets import fetch_california_housing
 # 这里使用加州房价数据集作为替代，因为它们的结构和任务类型（回归）完全一致。
 # 如果你使用的是旧版本 sklearn (<1.2)，可以使用注释中的 load_boston 部分。
 housing = fetch_california_housing()
-X = housing.data
+X = housing.data  #平均收入、房屋年龄、房间数、卧室数、居住人数、位置等
 y = housing.target
 feature_names = housing.feature_names
 
@@ -45,7 +45,10 @@ print(f"偏置 (Intercept): {lr.intercept_}")
 mse = mean_squared_error(y_test, y_predict)
 r2 = r2_score(y_test, y_predict)
 print(f"\n--- 评估指标 ---")
+#真实值 - 预测值，算出每一次的误差，平方，求平均值
+#MSE 越小越好；MSE = 0：预测完全精准，和真实值一模一样；MSE 越大：整体误差越大，模型越不准
 print(f"均方误差 (MSE): {mse:.2f}")
+# R方越接近 1 越好，拿平均值猜 的总误差
 print(f"R² 得分 (R2 Score): {r2:.2f}")
 
 # --- 5. 可视化结果 ---
