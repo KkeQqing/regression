@@ -83,7 +83,7 @@ plt.rcParams['font.sans-serif'] = 'SimHei'
 plt.rcParams['axes.unicode_minus'] = False
 
 # 添加标题
-plt.title('加州房价走势真实与预测值（Lasso 回归）')
+plt.title('房价走势真实与预测值（Lasso 回归）')
 
 # 展示
 plt.show()
